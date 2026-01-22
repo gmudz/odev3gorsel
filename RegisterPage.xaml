@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="odev3gorsel.RegisterPage"
+             Title="Hesap Oluştur"
+             BackgroundColor="#E0F2F1">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
+
+            <!-- İkon -->
+            <Frame BackgroundColor="#00695C" 
+                   CornerRadius="50" 
+                   HeightRequest="100" 
+                   WidthRequest="100" 
+                   HorizontalOptions="Center"
+                   HasShadow="True"
+                   Padding="0">
+                <Label Text="👤" 
+                       FontSize="48" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center"/>
+            </Frame>
+
+            <!-- Kayıt Formu -->
+            <Frame BackgroundColor="White" CornerRadius="20" Padding="25" HasShadow="True">
+                <VerticalStackLayout Spacing="18">
+                    
+                    <Label Text="Hesap Oluştur" 
+                           FontSize="26" 
+                           HorizontalOptions="Center" 
+                           FontAttributes="Bold"
+                           TextColor="#00695C"/>
+
+                    <Label Text="Yeni bir hesap açın" 
+                           FontSize="14" 
+                           HorizontalOptions="Center" 
+                           TextColor="#757575"/>
+
+                    <!-- Kullanıcı Adı -->
+                    <Frame BackgroundColor="#F5F5F5" CornerRadius="12" Padding="5" HasShadow="False">
+                        <Entry x:Name="EntUsername" 
+                               Placeholder="👤  Kullanıcı adınız" 
+                               FontSize="16"/>
+                    </Frame>
+
+                    <!-- E-posta -->
+                    <Frame BackgroundColor="#F5F5F5" CornerRadius="12" Padding="5" HasShadow="False">
+                        <Entry x:Name="EntEmail" 
+                               Placeholder="📧  E-posta adresiniz" 
+                               Keyboard="Email"
+                               FontSize="16"/>
+                    </Frame>
+
+                    <!-- Şifre -->
+                    <Frame BackgroundColor="#F5F5F5" CornerRadius="12" Padding="5" HasShadow="False">
+                        <Entry x:Name="EntPassword" 
+                               Placeholder="🔒  Şifreniz" 
+                               IsPassword="True"
+                               FontSize="16"/>
+                    </Frame>
+
+                    <!-- Kayıt Butonu -->
+                    <Button Text="Hesap Oluştur" 
+                            Clicked="BtnRegister_Clicked" 
+                            BackgroundColor="#00897B" 
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            CornerRadius="12"
+                            HeightRequest="50"/>
+
+                    <!-- Ayraç -->
+                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" Margin="20,5"/>
+
+                    <!-- Giriş Yap Linki -->
+                    <Button Text="Zaten hesabınız var mı? Giriş Yapın" 
+                            Clicked="BtnGoToLogin_Clicked" 
+                            BackgroundColor="Transparent" 
+                            TextColor="#00897B"
+                            FontSize="14"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

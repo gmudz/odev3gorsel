@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="odev3gorsel.KurlarPage"
+             Title="Döviz Kurları"
+             BackgroundColor="#E0F2F1">
+
+    <Grid RowDefinitions="Auto, Auto, *">
+        
+        <!-- Başlık -->
+        <Frame Grid.Row="0" BackgroundColor="#00897B" CornerRadius="0" Padding="15" HasShadow="True">
+            <VerticalStackLayout>
+                <Label Text="💱 Güncel Döviz Kurları" 
+                       TextColor="White" 
+                       FontSize="20"
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center"/>
+                <Label Text="Canlı piyasa verileri" 
+                       TextColor="#B2DFDB" 
+                       FontSize="12"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Yükleme Göstergesi -->
+        <ActivityIndicator x:Name="LoadingIndicator" 
+                           Grid.Row="1" 
+                           IsRunning="True" 
+                           IsVisible="False" 
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Center" 
+                           Color="#00897B"/>
+
+        <!-- Tablo Başlığı -->
+        <Frame Grid.Row="1" BackgroundColor="#B2DFDB" CornerRadius="0" Padding="12" HasShadow="False" Margin="10,10,10,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="70" />
+                </Grid.ColumnDefinitions>
+                <Label Text="💰 Tür" FontAttributes="Bold" Grid.Column="0" TextColor="#00695C"/>
+                <Label Text="📈 Alış" FontAttributes="Bold" Grid.Column="1" TextColor="#00695C"/>
+                <Label Text="📉 Satış" FontAttributes="Bold" Grid.Column="2" TextColor="#00695C"/>
+                <Label Text="📊 Fark" FontAttributes="Bold" Grid.Column="3" TextColor="#00695C"/>
+            </Grid>
+        </Frame>
+
+        <!-- Kur Listesi -->
+        <CollectionView x:Name="KurlarList" Grid.Row="2" Margin="10,5,10,10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="White" CornerRadius="10" Padding="12" Margin="0,5" HasShadow="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="70" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Isim}" VerticalOptions="Center" FontAttributes="Bold" TextColor="#00695C"/>
+                            <Label Text="{Binding Alis}" Grid.Column="1" VerticalOptions="Center" TextColor="#424242"/>
+                            <Label Text="{Binding Satis}" Grid.Column="2" VerticalOptions="Center" TextColor="#424242"/>
+                            <Frame Grid.Column="3" BackgroundColor="#E8F5E9" CornerRadius="8" Padding="5,2" HasShadow="False">
+                                <Label Text="{Binding Fark}" VerticalOptions="Center" TextColor="#2E7D32" HorizontalOptions="Center" FontSize="12"/>
+                            </Frame>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

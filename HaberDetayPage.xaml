@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="odev3gorsel.HaberDetayPage"
+             Title="Haber Detayı"
+             BackgroundColor="#E0F2F1">
+    
+    <Grid RowDefinitions="Auto, *">
+        
+        <!-- Paylaşma Butonu -->
+        <Frame Grid.Row="0" BackgroundColor="#00897B" CornerRadius="0" Padding="10" HasShadow="True">
+            <Button Text="📤 Haberi Paylaş" 
+                    Clicked="Share_Clicked" 
+                    BackgroundColor="#00695C" 
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"/>
+        </Frame>
+        
+        <!-- Haber İçeriği -->
+        <WebView x:Name="HaberWeb" Grid.Row="1"/>
+        
+    </Grid>
+</ContentPage>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="odev3gorsel.YapilacaklarPage"
+             Title="Yapılacaklar"
+             BackgroundColor="#E0F2F1">
+
+    <Grid RowDefinitions="Auto, *">
+        
+        <!-- Görev Ekleme Bölümü -->
+        <Frame Grid.Row="0" BackgroundColor="#00897B" CornerRadius="0" Padding="15" HasShadow="True">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="📝 Yeni Görev Ekle" 
+                       FontSize="18" 
+                       FontAttributes="Bold" 
+                       TextColor="White"
+                       HorizontalOptions="Center"/>
+                
+                <!-- Görev Başlığı -->
+                <Frame BackgroundColor="White" CornerRadius="12" Padding="5" HasShadow="False">
+                    <Entry x:Name="TodoEntry" 
+                           Placeholder="✏️  Görev başlığı..." 
+                           FontSize="16"/>
+                </Frame>
+
+                <!-- Görev Detayı -->
+                <Frame BackgroundColor="White" CornerRadius="12" Padding="5" HasShadow="False">
+                    <Entry x:Name="DetailEntry" 
+                           Placeholder="📄  Görev detayı..." 
+                           FontSize="14"/>
+                </Frame>
+
+                <!-- Tarih ve Saat -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                    <DatePicker x:Name="TaskDatePicker" 
+                                BackgroundColor="White"
+                                TextColor="#00695C"
+                                Format="dd/MM/yyyy"/>
+                    <TimePicker x:Name="TaskTimePicker" 
+                                Grid.Column="1"
+                                BackgroundColor="White"
+                                TextColor="#00695C"
+                                Format="HH:mm"/>
+                </Grid>
+                
+                <Button Text="➕ Görev Ekle" 
+                        Clicked="AddTodo_Clicked" 
+                        BackgroundColor="#00695C" 
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="12"
+                        HeightRequest="45"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Görev Listesi -->
+        <CollectionView x:Name="TodoCollection" Grid.Row="1" Margin="10">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                    <Label Text="📋" FontSize="48" HorizontalOptions="Center"/>
+                    <Label Text="Henüz görev eklenmemiş" 
+                           FontSize="16" 
+                           TextColor="#757575"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="White" CornerRadius="12" Margin="0,5" Padding="12" HasShadow="True">
+                        <Grid ColumnDefinitions="Auto, *, Auto, Auto" ColumnSpacing="10">
+                            
+                            <!-- Tamamlanma Checkbox -->
+                            <CheckBox IsChecked="{Binding IsCompleted}" 
+                                      CheckedChanged="CheckBox_CheckedChanged"
+                                      Color="#00897B"/>
+                            
+                            <!-- Görev Bilgileri -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                <Label Text="{Binding TaskName}" 
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#00695C"/>
+                                <Label Text="{Binding Detail}" 
+                                       FontSize="13"
+                                       TextColor="#757575"
+                                       MaxLines="1"
+                                       LineBreakMode="TailTruncation"/>
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}" 
+                                           FontSize="11"
+                                           TextColor="#00897B"/>
+                                    <Label Text="{Binding Time, StringFormat='{0:hh\\:mm}'}" 
+                                           FontSize="11"
+                                           TextColor="#00897B"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            
+                            <!-- Düzenleme Butonu -->
+                            <Button Grid.Column="2" 
+                                    Text="✏️" 
+                                    Clicked="EditTodo_Clicked" 
+                                    CommandParameter="{Binding .}" 
+                                    BackgroundColor="#E3F2FD" 
+                                    TextColor="#1565C0"
+                                    CornerRadius="10"
+                                    HeightRequest="40"
+                                    WidthRequest="45"/>
+
+                            <!-- Silme Butonu -->
+                            <Button Grid.Column="3" 
+                                    Text="🗑️" 
+                                    Clicked="DeleteTodo_Clicked" 
+                                    CommandParameter="{Binding .}" 
+                                    BackgroundColor="#FFEBEE" 
+                                    TextColor="#C62828"
+                                    CornerRadius="10"
+                                    HeightRequest="40"
+                                    WidthRequest="45"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

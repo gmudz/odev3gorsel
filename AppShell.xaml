@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="odev3gorsel.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:odev3gorsel"
+       Shell.FlyoutBehavior="Flyout"
+       Shell.FlyoutBackgroundColor="#00897B"
+       FlyoutBackgroundColor="#00897B">
+
+    <!-- Flyout Başlık -->
+    <Shell.FlyoutHeader>
+        <VerticalStackLayout BackgroundColor="#00695C" Padding="20" Spacing="10">
+            <Border StrokeShape="RoundRectangle 40" 
+                    HeightRequest="80" 
+                    WidthRequest="80" 
+                    HorizontalOptions="Center"
+                    Stroke="White"
+                    StrokeThickness="2">
+                <Image Source="resim.png" Aspect="AspectFill"/>
+            </Border>
+            <Label Text="Murad Ashkar" 
+                   TextColor="White" 
+                   FontAttributes="Bold" 
+                   FontSize="18"
+                   HorizontalOptions="Center"/>
+            <Label Text="22670310208" 
+                   TextColor="#B2DFDB" 
+                   FontSize="14"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </Shell.FlyoutHeader>
+
+    <FlyoutItem Title="🏠 Ana Sayfa" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="🏠 Ana Sayfa" ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="💱 Döviz Kurları">
+        <ShellContent ContentTemplate="{DataTemplate local:KurlarPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="📰 Haberler">
+        <ShellContent ContentTemplate="{DataTemplate local:HaberlerPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="🌤️ Hava Durumu">
+        <ShellContent ContentTemplate="{DataTemplate local:HavaDurumuPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="📝 Yapılacaklar">
+        <ShellContent ContentTemplate="{DataTemplate local:YapilacaklarPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="⚙️ Ayarlar">
+        <ShellContent ContentTemplate="{DataTemplate local:AyarlarPage}" />
+    </FlyoutItem>
+
+</Shell>

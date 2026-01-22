@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="odev3gorsel.HavaDurumuPage"
+             Title="Hava Durumu"
+             BackgroundColor="#E0F2F1">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Başlık -->
+            <Frame BackgroundColor="#00897B" CornerRadius="15" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="🌤️ Hava Durumu" 
+                           FontSize="22" 
+                           FontAttributes="Bold" 
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Şehrinizin hava durumunu öğrenin" 
+                           FontSize="13" 
+                           TextColor="#B2DFDB"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Şehir Arama -->
+            <Frame BackgroundColor="White" CornerRadius="15" Padding="20" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Şehir Ara" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="#00695C"/>
+                    
+                    <Frame BackgroundColor="#F5F5F5" CornerRadius="12" Padding="5" HasShadow="False">
+                        <Entry x:Name="CityEntry" 
+                               Placeholder="🏙️  Şehir adı yazın (örn: Bartin)" 
+                               FontSize="16"/>
+                    </Frame>
+                    
+                    <Button Text="🔍 Hava Durumunu Getir" 
+                            Clicked="GetWeather_Clicked" 
+                            BackgroundColor="#00897B"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="50"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Hava Durumu Kartı -->
+            <Frame BackgroundColor="White" CornerRadius="20" Padding="25" HasShadow="True" HorizontalOptions="Center" WidthRequest="300">
+                <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                    
+                    <Label x:Name="CityLabel" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center"
+                           TextColor="#00695C"/>
+                    
+                    <Frame BackgroundColor="#E0F2F1" CornerRadius="50" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" HasShadow="False">
+                        <Label x:Name="TempLabel" 
+                               FontSize="36" 
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               TextColor="#00897B"/>
+                    </Frame>
+                    
+                    <Label x:Name="DescLabel" 
+                           FontSize="16" 
+                           HorizontalOptions="Center"
+                           TextColor="#757575"/>
+                           
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Not -->
+            <Label Text="💡 İpucu: Türkçe karakterler otomatik dönüştürülür" 
+                   FontSize="12" 
+                   TextColor="#757575"
+                   HorizontalOptions="Center"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

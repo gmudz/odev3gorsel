@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="odev3gorsel.MainPage"
+             Title="Ana Sayfa"
+             BackgroundColor="#E0F2F1">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="25" HorizontalOptions="Center" VerticalOptions="Center">
+
+            <!-- Başlık -->
+            <Frame BackgroundColor="#00897B" CornerRadius="15" Padding="20" HasShadow="True">
+                <Label Text="BSM322 - Görsel Programlama" 
+                       FontSize="22" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center"
+                       TextColor="White"/>
+            </Frame>
+
+            <!-- Profil Kartı -->
+            <Frame BackgroundColor="White" CornerRadius="20" Padding="25" HasShadow="True" WidthRequest="320">
+                <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                    
+                    <!-- Profil Resmi -->
+                    <Border StrokeShape="RoundRectangle 75" 
+                            HeightRequest="150" 
+                            WidthRequest="150" 
+                            HorizontalOptions="Center"
+                            Stroke="#00897B"
+                            StrokeThickness="4">
+                        <Image Source="resim.png" Aspect="AspectFill" />
+                    </Border>
+
+                    <!-- İsim -->
+                    <Label Text="Murad Ashkar" 
+                           FontSize="26" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center"
+                           TextColor="#00695C"/>
+
+                    <!-- Numara -->
+                    <Frame BackgroundColor="#B2DFDB" CornerRadius="10" Padding="10,5" HasShadow="False">
+                        <Label Text="22670310208" 
+                               FontSize="18" 
+                               HorizontalOptions="Center"
+                               TextColor="#00695C"
+                               FontAttributes="Bold"/>
+                    </Frame>
+
+                    <!-- Üniversite Bilgisi -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Bartın Üniversitesi" 
+                               HorizontalTextAlignment="Center" 
+                               FontSize="16"
+                               TextColor="#004D40"
+                               FontAttributes="Bold"/>
+                        <Label Text="Bilgisayar Mühendisliği Bölümü"
+                               HorizontalTextAlignment="Center" 
+                               FontSize="14"
+                               TextColor="#00796B"/>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Ödev Bilgisi -->
+            <Frame BackgroundColor="#00695C" CornerRadius="12" Padding="15" HasShadow="True">
+                <Label Text="📚 Ödev-3: Mobil Uygulama Projesi" 
+                       FontSize="16" 
+                       HorizontalOptions="Center"
+                       TextColor="White"/>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
