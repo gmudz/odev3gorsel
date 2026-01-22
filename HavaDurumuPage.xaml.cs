@@ -1,148 +1,194 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
 namespace odev3gorsel
 {
     public partial class HavaDurumuPage : ContentPage
     {
-        private const string ApiKey = "8d7c9730dc973af7578440d323f52bbc";
-        private const string CitiesFileName = "saved_cities.json"; // JSON dosya adı
+        private List<string> _cities = new List<string>();
+        private readonly string _citiesFilePath;
 
         public HavaDurumuPage()
         {
             InitializeComponent();
-            LoadSavedCity();
+            _citiesFilePath = Path.Combine(FileSystem.AppDataDirectory, "saved_cities.json");
+            LoadCitiesFromJson();
+            DisplayCities();
         }
 
-        private async void GetWeather_Clicked(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(CityEntry.Text))
-                await FetchWeatherData(CityEntry.Text);
-        }
-
-        // Türkçe karakterleri dönüştürme fonksiyonu
-        private string ConvertTurkishCharacters(string text)
-        {
-            if (string.IsNullOrEmpty(text)) return text;
-
-            // Türkçe karakter dönüşümleri
-            var replacements = new Dictionary<char, char>
-            {
-                {'ş', 's'}, {'Ş', 'S'},
-                {'ğ', 'g'}, {'Ğ', 'G'},
-                {'ı', 'i'}, {'İ', 'I'},
-                {'ö', 'o'}, {'Ö', 'O'},
-                {'ü', 'u'}, {'Ü', 'U'},
-                {'ç', 'c'}, {'Ç', 'C'}
-            };
-
-            var result = text.ToCharArray();
-            for (int i = 0; i < result.Length; i++)
-            {
-                if (replacements.ContainsKey(result[i]))
-                {
-                    result[i] = replacements[result[i]];
-                }
-            }
-
-            return new string(result);
-        }
-
-        private async Task FetchWeatherData(string city)
+        private void LoadCitiesFromJson()
         {
             try
             {
-                using HttpClient client = new HttpClient();
-                
-                // Türkçe karakterleri dönüştür
-                string convertedCity = ConvertTurkishCharacters(city);
-                
-                string url = $"https://api.openweathermap.org/data/2.5/weather?q={convertedCity}&appid={ApiKey}&units=metric&lang=tr";
-
-                var response = await client.GetStringAsync(url);
-                var data = JsonConvert.DeserializeObject<dynamic>(response);
-
-                CityLabel.Text = data?.name;
-                TempLabel.Text = $"{data?.main?.temp}°C";
-                DescLabel.Text = data?.weather[0]?.description;
-
-                // Şehri JSON dosyasına kaydet
-                await SaveCityToJson(city);
-            }
-            catch (Exception)
-            {
-                await DisplayAlert("Hata", "Şehir bulunamadı veya API henüz aktifleşmedi.", "Tamam");
-            }
-        }
-
-        // Şehri JSON dosyasına kaydet
-        private async Task SaveCityToJson(string city)
-        {
-            try
-            {
-                string filePath = Path.Combine(FileSystem.AppDataDirectory, CitiesFileName);
-                
-                List<string> cities = new List<string>();
-                
-                // Mevcut dosyayı oku
-                if (File.Exists(filePath))
+                if (File.Exists(_citiesFilePath))
                 {
-                    string existingJson = await File.ReadAllTextAsync(filePath);
-                    cities = JsonConvert.DeserializeObject<List<string>>(existingJson) ?? new List<string>();
-                }
-
-                // Şehir listede yoksa ekle
-                if (!cities.Contains(city, StringComparer.OrdinalIgnoreCase))
-                {
-                    cities.Add(city);
-                }
-
-                // JSON olarak kaydet
-                string json = JsonConvert.SerializeObject(cities, Formatting.Indented);
-                await File.WriteAllTextAsync(filePath, json);
-
-                // Ayrıca son aranan şehri kaydet
-                Preferences.Set("LastSearchCity", city);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Şehir kaydedilemedi: {ex.Message}");
-            }
-        }
-
-        // Kaydedilmiş şehri yükle
-        private async void LoadSavedCity()
-        {
-            try
-            {
-                string filePath = Path.Combine(FileSystem.AppDataDirectory, CitiesFileName);
-                
-                string lastCity = "Bartın"; // Varsayılan şehir
-
-                // JSON dosyasından son şehri oku
-                if (File.Exists(filePath))
-                {
-                    string json = await File.ReadAllTextAsync(filePath);
-                    var cities = JsonConvert.DeserializeObject<List<string>>(json);
-                    
-                    if (cities != null && cities.Count > 0)
-                    {
-                        lastCity = cities.Last(); // Son eklenen şehri al
-                    }
+                    string json = File.ReadAllText(_citiesFilePath);
+                    _cities = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
                 }
                 else
                 {
-                    // Eğer dosya yoksa Preferences'tan oku
-                    lastCity = Preferences.Get("LastSearchCity", "Bartın");
+                    _cities = new List<string> { "BARTIN", "ANKARA", "ISTANBUL" };
+                    SaveCitiesToJson();
                 }
-
-                CityEntry.Text = lastCity;
-                await FetchWeatherData(lastCity);
             }
-            catch (Exception)
+            catch
             {
-                CityEntry.Text = "Bartın";
-                await FetchWeatherData("Bartın");
+                _cities = new List<string> { "BARTIN", "ANKARA", "ISTANBUL" };
             }
+        }
+
+        private void SaveCitiesToJson()
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(_cities);
+                File.WriteAllText(_citiesFilePath, json);
+            }
+            catch { }
+        }
+
+        private void DisplayCities()
+        {
+            CitiesStack.Children.Clear();
+
+            foreach (var city in _cities)
+            {
+                var cityView = CreateCityView(city);
+                CitiesStack.Children.Add(cityView);
+            }
+        }
+
+        private View CreateCityView(string cityName)
+        {
+            string normalizedName = NormalizeTurkishChars(cityName);
+            
+            // MGM URL for weather image
+            string url = $"https://www.mgm.gov.tr/sunum/tahmin-klasik-5070.aspx?m={normalizedName}&basla=1&bitir=5&rC=111&rZ=fff";
+
+            var frame = new Frame
+            {
+                BackgroundColor = Application.Current?.RequestedTheme == AppTheme.Dark 
+                    ? Color.FromArgb("#2d2d2d") : Colors.White,
+                CornerRadius = 10,
+                Padding = 0,
+                HasShadow = true
+            };
+
+            var mainStack = new VerticalStackLayout { Spacing = 0 };
+
+            // Header with city name and delete button
+            var headerGrid = new Grid
+            {
+                BackgroundColor = Application.Current?.RequestedTheme == AppTheme.Dark 
+                    ? Color.FromArgb("#004D40") : Color.FromArgb("#00897B"),
+                Padding = new Thickness(10, 8),
+                ColumnDefinitions = new ColumnDefinitionCollection
+                {
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Auto }
+                }
+            };
+
+            var cityLabel = new Label
+            {
+                Text = cityName.ToUpper(),
+                FontSize = 18,
+                FontAttributes = FontAttributes.Bold,
+                TextColor = Colors.White,
+                VerticalOptions = LayoutOptions.Center
+            };
+
+            var deleteButton = new Button
+            {
+                Text = "X",
+                BackgroundColor = Colors.Red,
+                TextColor = Colors.White,
+                WidthRequest = 32,
+                HeightRequest = 32,
+                CornerRadius = 5,
+                FontSize = 12,
+                Padding = 0,
+                CommandParameter = cityName
+            };
+            deleteButton.Clicked += DeleteCity_Clicked;
+
+            headerGrid.Add(cityLabel, 0, 0);
+            headerGrid.Add(deleteButton, 1, 0);
+
+            // WebView for weather
+            var webView = new WebView
+            {
+                Source = url,
+                HeightRequest = 140,
+                BackgroundColor = Colors.White
+            };
+
+            mainStack.Children.Add(headerGrid);
+            mainStack.Children.Add(webView);
+            frame.Content = mainStack;
+
+            return frame;
+        }
+
+        private string NormalizeTurkishChars(string text)
+        {
+            return text
+                .Replace("ç", "c").Replace("Ç", "C")
+                .Replace("ğ", "g").Replace("Ğ", "G")
+                .Replace("ı", "i").Replace("I", "I")
+                .Replace("İ", "I")
+                .Replace("ö", "o").Replace("Ö", "O")
+                .Replace("ş", "s").Replace("Ş", "S")
+                .Replace("ü", "u").Replace("Ü", "U")
+                .ToUpper();
+        }
+
+        private async void AddCity_Clicked(object sender, EventArgs e)
+        {
+            string city = await DisplayPromptAsync(
+                "Sehir Ekle", 
+                "Sehir adini girin:",
+                "Ekle", 
+                "Iptal",
+                placeholder: "Ornek: IZMIR");
+
+            if (!string.IsNullOrWhiteSpace(city))
+            {
+                string normalizedCity = NormalizeTurkishChars(city.Trim());
+                
+                if (!_cities.Contains(normalizedCity))
+                {
+                    _cities.Add(normalizedCity);
+                    SaveCitiesToJson();
+                    DisplayCities();
+                }
+                else
+                {
+                    await DisplayAlert("Uyari", "Bu sehir zaten ekli!", "Tamam");
+                }
+            }
+        }
+
+        private async void DeleteCity_Clicked(object? sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var cityName = button?.CommandParameter?.ToString();
+
+            if (!string.IsNullOrEmpty(cityName))
+            {
+                bool confirm = await DisplayAlert("Sil", $"{cityName} silinsin mi?", "Evet", "Hayir");
+                
+                if (confirm)
+                {
+                    _cities.Remove(cityName);
+                    SaveCitiesToJson();
+                    DisplayCities();
+                }
+            }
+        }
+
+        private void Refresh_Clicked(object sender, EventArgs e)
+        {
+            DisplayCities();
         }
     }
 }

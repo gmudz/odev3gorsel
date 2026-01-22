@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="odev3gorsel.RegisterPage"
              Title="Hesap Oluştur"
-             BackgroundColor="#E0F2F1">
+             BackgroundColor="{AppThemeBinding Light=#E0F2F1, Dark=#1a1a1a}">
 
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
 
             <!-- İkon -->
-            <Frame BackgroundColor="#00695C" 
+            <Frame BackgroundColor="{AppThemeBinding Light=#00695C, Dark=#004D40}" 
                    CornerRadius="50" 
                    HeightRequest="100" 
                    WidthRequest="100" 
@@ -23,47 +23,53 @@
             </Frame>
 
             <!-- Kayıt Formu -->
-            <Frame BackgroundColor="White" CornerRadius="20" Padding="25" HasShadow="True">
+            <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#2d2d2d}" CornerRadius="20" Padding="25" HasShadow="True">
                 <VerticalStackLayout Spacing="18">
                     
                     <Label Text="Hesap Oluştur" 
                            FontSize="26" 
                            HorizontalOptions="Center" 
                            FontAttributes="Bold"
-                           TextColor="#00695C"/>
+                           TextColor="{AppThemeBinding Light=#00695C, Dark=#4DB6AC}"/>
 
                     <Label Text="Yeni bir hesap açın" 
                            FontSize="14" 
                            HorizontalOptions="Center" 
-                           TextColor="#757575"/>
+                           TextColor="{AppThemeBinding Light=#757575, Dark=#aaaaaa}"/>
 
                     <!-- Kullanıcı Adı -->
-                    <Frame BackgroundColor="#F5F5F5" CornerRadius="12" Padding="5" HasShadow="False">
+                    <Frame BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#3d3d3d}" CornerRadius="12" Padding="5" HasShadow="False">
                         <Entry x:Name="EntUsername" 
                                Placeholder="👤  Kullanıcı adınız" 
-                               FontSize="16"/>
+                               FontSize="16"
+                               TextColor="{AppThemeBinding Light=#333333, Dark=White}"
+                               PlaceholderColor="{AppThemeBinding Light=#999999, Dark=#888888}"/>
                     </Frame>
 
                     <!-- E-posta -->
-                    <Frame BackgroundColor="#F5F5F5" CornerRadius="12" Padding="5" HasShadow="False">
+                    <Frame BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#3d3d3d}" CornerRadius="12" Padding="5" HasShadow="False">
                         <Entry x:Name="EntEmail" 
                                Placeholder="📧  E-posta adresiniz" 
                                Keyboard="Email"
-                               FontSize="16"/>
+                               FontSize="16"
+                               TextColor="{AppThemeBinding Light=#333333, Dark=White}"
+                               PlaceholderColor="{AppThemeBinding Light=#999999, Dark=#888888}"/>
                     </Frame>
 
                     <!-- Şifre -->
-                    <Frame BackgroundColor="#F5F5F5" CornerRadius="12" Padding="5" HasShadow="False">
+                    <Frame BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#3d3d3d}" CornerRadius="12" Padding="5" HasShadow="False">
                         <Entry x:Name="EntPassword" 
                                Placeholder="🔒  Şifreniz" 
                                IsPassword="True"
-                               FontSize="16"/>
+                               FontSize="16"
+                               TextColor="{AppThemeBinding Light=#333333, Dark=White}"
+                               PlaceholderColor="{AppThemeBinding Light=#999999, Dark=#888888}"/>
                     </Frame>
 
                     <!-- Kayıt Butonu -->
                     <Button Text="Hesap Oluştur" 
                             Clicked="BtnRegister_Clicked" 
-                            BackgroundColor="#00897B" 
+                            BackgroundColor="{AppThemeBinding Light=#00897B, Dark=#26A69A}" 
                             TextColor="White"
                             FontAttributes="Bold"
                             FontSize="18"
@@ -71,13 +77,13 @@
                             HeightRequest="50"/>
 
                     <!-- Ayraç -->
-                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" Margin="20,5"/>
+                    <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#444444}" Margin="20,5"/>
 
                     <!-- Giriş Yap Linki -->
                     <Button Text="Zaten hesabınız var mı? Giriş Yapın" 
                             Clicked="BtnGoToLogin_Clicked" 
                             BackgroundColor="Transparent" 
-                            TextColor="#00897B"
+                            TextColor="{AppThemeBinding Light=#00897B, Dark=#4DB6AC}"
                             FontSize="14"/>
 
                 </VerticalStackLayout>

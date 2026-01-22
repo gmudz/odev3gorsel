@@ -3,15 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="odev3gorsel.HaberDetayPage"
              Title="Haber Detayı"
-             BackgroundColor="#E0F2F1">
+             BackgroundColor="{AppThemeBinding Light=#E0F2F1, Dark=#1a1a1a}">
     
     <Grid RowDefinitions="Auto, *">
         
         <!-- Paylaşma Butonu -->
-        <Frame Grid.Row="0" BackgroundColor="#00897B" CornerRadius="0" Padding="10" HasShadow="True">
+        <Frame Grid.Row="0" BackgroundColor="{AppThemeBinding Light=#00897B, Dark=#004D40}" CornerRadius="0" Padding="10" HasShadow="True">
             <Button Text="📤 Haberi Paylaş" 
                     Clicked="Share_Clicked" 
-                    BackgroundColor="#00695C" 
+                    BackgroundColor="{AppThemeBinding Light=#00695C, Dark=#00796B}" 
                     TextColor="White"
                     FontAttributes="Bold"
                     CornerRadius="10"/>

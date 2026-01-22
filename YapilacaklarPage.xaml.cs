@@ -9,94 +9,48 @@ namespace odev3gorsel
     {
         public ObservableCollection<TodoItem> TodoList { get; set; } = new ObservableCollection<TodoItem>();
         private readonly FirebaseService _firebaseService = new FirebaseService();
-        private TodoItem? _editingItem = null; // Düzenleme modu için
 
         public YapilacaklarPage()
         {
             InitializeComponent();
             TodoCollection.ItemsSource = TodoList;
             LoadTodosFromFirebase();
+
+            // MessagingCenter abonelikleri
+            MessagingCenter.Subscribe<TodoDetayPage, TodoItem>(this, "TodoAdded", async (sender, item) =>
+            {
+                await SaveTodoToFirebase(item);
+                TodoList.Add(item);
+            });
+
+            MessagingCenter.Subscribe<TodoDetayPage, TodoItem>(this, "TodoUpdated", async (sender, item) =>
+            {
+                await UpdateTodoInFirebase(item);
+                var index = TodoList.ToList().FindIndex(t => t.Id == item.Id);
+                if (index >= 0)
+                {
+                    TodoList.RemoveAt(index);
+                    TodoList.Insert(index, item);
+                }
+            });
         }
 
-        // Görev Ekleme veya Güncelleme
-        private async void AddTodo_Clicked(object sender, EventArgs e)
+        // Yeni görev ekleme - Detay sayfasına git
+        private async void AddNew_Clicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TodoEntry.Text)) 
-            {
-                await DisplayAlert("Uyarı", "Lütfen görev başlığı girin!", "Tamam");
-                return;
-            }
-
-            if (_editingItem != null)
-            {
-                // Güncelleme modu
-                _editingItem.TaskName = TodoEntry.Text;
-                _editingItem.Detail = DetailEntry.Text ?? "";
-                _editingItem.Date = TaskDatePicker.Date;
-                _editingItem.Time = TaskTimePicker.Time;
-
-                try
-                {
-                    await _firebaseService.UpdateTodo(_editingItem);
-                    
-                    // Listeyi yenile
-                    var index = TodoList.IndexOf(_editingItem);
-                    if (index >= 0)
-                    {
-                        TodoList.RemoveAt(index);
-                        TodoList.Insert(index, _editingItem);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    await DisplayAlert("Hata", "Görev güncellenemedi: " + ex.Message, "Tamam");
-                }
-                
-                _editingItem = null;
-            }
-            else
-            {
-                // Yeni ekleme
-                var newItem = new TodoItem 
-                { 
-                    TaskName = TodoEntry.Text,
-                    Detail = DetailEntry.Text ?? "",
-                    Date = TaskDatePicker.Date,
-                    Time = TaskTimePicker.Time,
-                    IsCompleted = false
-                };
-
-                try
-                {
-                    newItem.Id = await _firebaseService.AddTodo(newItem);
-                    TodoList.Add(newItem);
-                }
-                catch (Exception ex)
-                {
-                    await DisplayAlert("Hata", "Görev kaydedilemedi: " + ex.Message, "Tamam");
-                }
-            }
-
-            ClearInputs();
+            await Shell.Current.Navigation.PushAsync(new TodoDetayPage());
         }
 
-        // Düzenleme Butonu
-        private void EditTodo_Clicked(object sender, EventArgs e)
+        // Görev düzenleme - Detay sayfasına git
+        private async void TodoItem_Tapped(object sender, TappedEventArgs e)
         {
-            var btn = sender as Button;
-            var item = btn?.CommandParameter as TodoItem;
-
-            if (item != null)
+            if (e.Parameter is TodoItem item)
             {
-                _editingItem = item;
-                TodoEntry.Text = item.TaskName;
-                DetailEntry.Text = item.Detail;
-                TaskDatePicker.Date = item.Date;
-                TaskTimePicker.Time = item.Time;
+                await Shell.Current.Navigation.PushAsync(new TodoDetayPage(item));
             }
         }
 
-        // Silme Butonu - Onay ile
+        // Silme Butonu - "Silinsin mi?" onayı
         private async void DeleteTodo_Clicked(object sender, EventArgs e)
         {
             var btn = sender as Button;
@@ -104,24 +58,17 @@ namespace odev3gorsel
 
             if (item != null)
             {
-                // Silme onayı iste
+                // "Silinsin mi?" onay diyaloğu
                 bool confirm = await DisplayAlert(
-                    "Silme Onayı", 
-                    $"'{item.TaskName}' görevini silmek istediğinize emin misiniz?", 
-                    "Evet, Sil", 
-                    "İptal");
+                    "Silinsin mi?", 
+                    "Silmeyi onaylıyor musunuz?", 
+                    "OK", 
+                    "CANCEL");
 
                 if (confirm)
                 {
-                    try
-                    {
-                        await _firebaseService.DeleteTodo(item.Id);
-                        TodoList.Remove(item);
-                    }
-                    catch (Exception ex)
-                    {
-                        await DisplayAlert("Hata", "Görev silinemedi: " + ex.Message, "Tamam");
-                    }
+                    await DeleteTodoFromFirebase(item);
+                    TodoList.Remove(item);
                 }
             }
         }
@@ -135,25 +82,11 @@ namespace odev3gorsel
             if (item != null)
             {
                 item.IsCompleted = e.Value;
-                try
-                {
-                    await _firebaseService.UpdateTodo(item);
-                }
-                catch (Exception ex)
-                {
-                    await DisplayAlert("Hata", "Görev güncellenemedi: " + ex.Message, "Tamam");
-                }
+                await UpdateTodoInFirebase(item);
             }
         }
 
-        // Input alanlarını temizle
-        private void ClearInputs()
-        {
-            TodoEntry.Text = string.Empty;
-            DetailEntry.Text = string.Empty;
-            TaskDatePicker.Date = DateTime.Now;
-            TaskTimePicker.Time = DateTime.Now.TimeOfDay;
-        }
+        // ============ FIREBASE İŞLEMLERİ ============
 
         // Firebase'den görevleri yükle
         private async void LoadTodosFromFirebase()
@@ -172,6 +105,52 @@ namespace odev3gorsel
             {
                 await DisplayAlert("Hata", "Görevler yüklenemedi: " + ex.Message, "Tamam");
             }
+        }
+
+        // Firebase'e yeni görev kaydet
+        private async Task SaveTodoToFirebase(TodoItem item)
+        {
+            try
+            {
+                item.Id = await _firebaseService.AddTodo(item);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Hata", "Görev kaydedilemedi: " + ex.Message, "Tamam");
+            }
+        }
+
+        // Firebase'de görev güncelle
+        private async Task UpdateTodoInFirebase(TodoItem item)
+        {
+            try
+            {
+                await _firebaseService.UpdateTodo(item);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Hata", "Görev güncellenemedi: " + ex.Message, "Tamam");
+            }
+        }
+
+        // Firebase'den görev sil
+        private async Task DeleteTodoFromFirebase(TodoItem item)
+        {
+            try
+            {
+                await _firebaseService.DeleteTodo(item.Id);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Hata", "Görev silinemedi: " + ex.Message, "Tamam");
+            }
+        }
+
+        // Sayfa kapatıldığında abonelikleri kaldır
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            // MessagingCenter.Unsubscribe kullanmayın çünkü sayfa tekrar açılabilir
         }
     }
 }

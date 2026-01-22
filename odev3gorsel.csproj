@@ -79,6 +79,9 @@
 	  <MauiXaml Update="RegisterPage.xaml">
 		<Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="TodoDetayPage.xaml">
+		<Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="YapilacaklarPage.xaml">
 		<Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

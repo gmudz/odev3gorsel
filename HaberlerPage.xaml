@@ -3,33 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="odev3gorsel.HaberlerPage"
              Title="Haberler"
-             BackgroundColor="#E0F2F1">
+             BackgroundColor="{AppThemeBinding Light=#E0F2F1, Dark=#1a1a1a}">
 
     <Grid RowDefinitions="Auto, *">
         
         <!-- Kategori Butonları -->
-        <Frame Grid.Row="0" BackgroundColor="#00897B" CornerRadius="0" Padding="5" HasShadow="True">
+        <Frame Grid.Row="0" BackgroundColor="{AppThemeBinding Light=#00897B, Dark=#004D40}" CornerRadius="0" Padding="5" HasShadow="True">
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                 <HorizontalStackLayout Spacing="8" Padding="10">
-                    <Button Text="📰 Manşet" Clicked="Kategori_Clicked" CommandParameter="manset" 
-                            BackgroundColor="#00695C" TextColor="White" CornerRadius="20" FontSize="13"/>
-                    <Button Text="⚡ Son Dakika" Clicked="Kategori_Clicked" CommandParameter="sondakika" 
-                            BackgroundColor="#00695C" TextColor="White" CornerRadius="20" FontSize="13"/>
-                    <Button Text="📋 Gündem" Clicked="Kategori_Clicked" CommandParameter="gundem" 
-                            BackgroundColor="#00695C" TextColor="White" CornerRadius="20" FontSize="13"/>
-                    <Button Text="💹 Ekonomi" Clicked="Kategori_Clicked" CommandParameter="ekonomi" 
-                            BackgroundColor="#00695C" TextColor="White" CornerRadius="20" FontSize="13"/>
-                    <Button Text="⚽ Spor" Clicked="Kategori_Clicked" CommandParameter="spor" 
-                            BackgroundColor="#00695C" TextColor="White" CornerRadius="20" FontSize="13"/>
+                    <Button Text="Manset" Clicked="Kategori_Clicked" CommandParameter="manset" 
+                            BackgroundColor="{AppThemeBinding Light=#00695C, Dark=#00796B}" TextColor="White" CornerRadius="20" FontSize="13"/>
+                    <Button Text="Son Dakika" Clicked="Kategori_Clicked" CommandParameter="sondakika" 
+                            BackgroundColor="{AppThemeBinding Light=#00695C, Dark=#00796B}" TextColor="White" CornerRadius="20" FontSize="13"/>
+                    <Button Text="Gundem" Clicked="Kategori_Clicked" CommandParameter="gundem" 
+                            BackgroundColor="{AppThemeBinding Light=#00695C, Dark=#00796B}" TextColor="White" CornerRadius="20" FontSize="13"/>
+                    <Button Text="Ekonomi" Clicked="Kategori_Clicked" CommandParameter="ekonomi" 
+                            BackgroundColor="{AppThemeBinding Light=#00695C, Dark=#00796B}" TextColor="White" CornerRadius="20" FontSize="13"/>
+                    <Button Text="Spor" Clicked="Kategori_Clicked" CommandParameter="spor" 
+                            BackgroundColor="{AppThemeBinding Light=#00695C, Dark=#00796B}" TextColor="White" CornerRadius="20" FontSize="13"/>
                 </HorizontalStackLayout>
             </ScrollView>
         </Frame>
 
         <!-- Haber Listesi -->
-        <CollectionView x:Name="HaberList" Grid.Row="1" SelectionMode="Single" SelectionChanged="Haber_Selected" Margin="10">
+        <CollectionView x:Name="HaberList" Grid.Row="1" Margin="10">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame BackgroundColor="White" CornerRadius="15" Margin="0,5" Padding="0" HasShadow="True">
+                    <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#2d2d2d}" CornerRadius="15" Margin="0,5" Padding="0" HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Haber_Tapped" CommandParameter="{Binding .}"/>
+                        </Frame.GestureRecognizers>
                         <Grid ColumnDefinitions="120, *" RowDefinitions="Auto">
                             
                             <!-- Haber Resmi -->
@@ -46,14 +49,11 @@
                                        FontAttributes="Bold" 
                                        MaxLines="2" 
                                        LineBreakMode="TailTruncation"
-                                       TextColor="#00695C"
+                                       TextColor="{AppThemeBinding Light=#00695C, Dark=#4DB6AC}"
                                        FontSize="14"/>
-                                <HorizontalStackLayout Spacing="5">
-                                    <Label Text="🕐" FontSize="12"/>
-                                    <Label Text="{Binding PubDate}" 
-                                           FontSize="12" 
-                                           TextColor="#757575"/>
-                                </HorizontalStackLayout>
+                                <Label Text="{Binding PubDate}" 
+                                       FontSize="12" 
+                                       TextColor="{AppThemeBinding Light=#757575, Dark=#aaaaaa}"/>
                             </VerticalStackLayout>
                             
                         </Grid>

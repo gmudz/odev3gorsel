@@ -38,17 +38,27 @@ namespace odev3gorsel
                     });
                 }
             }
-            catch (Exception ex) { await DisplayAlert("Hata", ex.Message, "Tamam"); }
+            catch (Exception ex) 
+            { 
+                await DisplayAlert("Hata", ex.Message, "Tamam"); 
+            }
         }
 
-        private void Kategori_Clicked(object sender, EventArgs e) => LoadHaberler((sender as Button).CommandParameter.ToString());
-
-        private async void Haber_Selected(object sender, SelectionChangedEventArgs e)
+        private void Kategori_Clicked(object sender, EventArgs e)
         {
-            if (e.CurrentSelection.FirstOrDefault() is Haber secilenHaber)
+            var button = sender as Button;
+            if (button?.CommandParameter != null)
+            {
+                LoadHaberler(button.CommandParameter.ToString() ?? "manset");
+            }
+        }
+
+        // Haber tiklandiginda detay sayfasina git
+        private async void Haber_Tapped(object sender, TappedEventArgs e)
+        {
+            if (e.Parameter is Haber secilenHaber)
             {
                 await Navigation.PushAsync(new HaberDetayPage(secilenHaber));
-                ((CollectionView)sender).SelectedItem = null;
             }
         }
     }
