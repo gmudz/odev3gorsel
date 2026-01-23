@@ -1,5 +1,8 @@
 BSM322 Görsel Programlama - Ödev 3 Bu uygulama, Bartın Üniversitesi Bilgisayar Mühendisliği BSM322 Görsel Programlama dersi için geliştirilmiş, .NET MAUI tabanlı çok sayfalı bir mobil uygulamadır.
 
+Tanıtım Videosu Uygulamanın kullanımını ve kod yapısını anlatan videoya aşağıdaki bağlantıdan ulaşabilirsiniz:
+https://www.youtube.com/watch?v=nBP62QyXnsI
+
 Öğrenci Bilgileri
 
 Ad Soyad: Murad ASHKAR
@@ -32,4 +35,4 @@ Kimlik Doğrulama: Firebase Auth
 
 Veri Formatı: JSON & RSS
 
-Tanıtım Videosu Uygulamanın kullanımını ve kod yapısını anlatan videoya aşağıdaki bağlantıdan ulaşabilirsiniz:
+
